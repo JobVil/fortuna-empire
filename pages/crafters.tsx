@@ -180,17 +180,7 @@ export default function Crafters() {
 						<a>Back to home</a>
 					</Link>
 				</Button>
-				<Flex
-					direction={'column'}
-					p={12}
-					m={10}
-					rounded={6}
-					alignItems={'center'}
-					justifyContent={'center'}
-					h={'100%'}
-					overflowY={'scroll'}
-					overflowX={'hidden'}
-				>
+				<Flex direction={'column'} p={12} m={10} rounded={6} alignItems={'center'} justifyContent={'center'} h={'100%'}>
 					{Object.keys(crafters).map((key) => (
 						<Crafter key={key + 'crafter-one'} playerName={key} skills={crafters[key].skills} />
 					))}
