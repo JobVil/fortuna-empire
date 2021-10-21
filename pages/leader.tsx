@@ -1,9 +1,52 @@
 import Link from 'next/link';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Heading, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Flex, Button } from '@chakra-ui/react';
 
+type TradeSkills = {
+	id: string;
+	guildMemberId: string;
+	name: string;
+	level: string;
+	numOfCraftingGear: number;
+	numOfTrophies: number;
+};
+
+type GuildMember = {
+	id: string;
+	userName: string;
+	title: string;
+	role?: string;
+	rank: string;
+	tradeSkills?: TradeSkills[];
+};
+
 export default function Leadership() {
+	const [guildLeaders, setGuildLeaders] = useState<GuildMember[]>([]);
+	useEffect(() => {
+		fetch('api/prisma/get', { method: 'GET' }).then((data) => {
+			data.json().then((data2) => {
+				console.log(data2);
+				console.log(Object.entries(data2));
+				setGuildLeaders(data2);
+			});
+		});
+	}, []);
+
+	const getRankInText = (rank: string) => {
+		switch (rank) {
+			case '4':
+				return 'member';
+			case '3':
+				return 'Officer';
+			case '2':
+				return 'Counselor';
+			case '1':
+				return 'Guild Master';
+			default:
+				return 'guest';
+		}
+	};
 	return (
 		<>
 			<Flex height={'100vh'} alignItems={'start'} justifyContent={'center'} background={'gray.800'}>
@@ -23,66 +66,20 @@ export default function Leadership() {
 						<Thead>
 							<Tr>
 								<Th>Game Name</Th>
-								<Th>Role</Th>
+								<Th>Title</Th>
 								<Th>Rank</Th>
 							</Tr>
 						</Thead>
 						<Tbody>
-							<Tr>
-								<Td>PvPr</Td>
-								<Td>Commander and chef</Td>
-								<Td>Guild Leader</Td>
-							</Tr>
-							<Tr>
-								<Td>RayningMist-healz</Td>
-								<Td>Treasurer and Task Master</Td>
-								<Td>Counselor</Td>
-							</Tr>
-							<Tr>
-								<Td>MrWakeField</Td>
-								<Td>1st Crafting Lead</Td>
-								<Td>Counselor</Td>
-							</Tr>
-							<Tr>
-								<Td>Joemadly</Td>
-								<Td>Recruitment</Td>
-								<Td>Officer</Td>
-							</Tr>
-							<Tr>
-								<Td>Redhorn70</Td>
-								<Td>2st Crafting Lead</Td>
-								<Td>Officer</Td>
-							</Tr>
-							<Tr>
-								<Td>Loewar</Td>
-								<Td>PVE & Guild Diplomat</Td>
-								<Td>Officer</Td>
-							</Tr>
-							<Tr>
-								<Td>Graysus</Td>
-								<Td>Guild Diplomat</Td>
-								<Td>Officer</Td>
-							</Tr>
-							<Tr>
-								<Td>Dakotax602</Td>
-								<Td>PVP</Td>
-								<Td>Officer</Td>
-							</Tr>
-							<Tr>
-								<Td>Poptart</Td>
-								<Td>PVP</Td>
-								<Td>Officer</Td>
-							</Tr>
-							<Tr>
-								<Td>Narbondel</Td>
-								<Td>Raid</Td>
-								<Td>Officer</Td>
-							</Tr>
-							<Tr>
-								<Td>GreenVeggie</Td>
-								<Td>General</Td>
-								<Td>Officer</Td>
-							</Tr>
+							{guildLeaders.map((guildLeader) => {
+								return (
+									<Tr key={guildLeader.id + 'guild-leader-page'}>
+										<Td>{guildLeader.userName}</Td>
+										<Td>{guildLeader.title}</Td>
+										<Td>{getRankInText(guildLeader.rank)}</Td>
+									</Tr>
+								);
+							})}
 						</Tbody>
 						<Tfoot>
 							<Tr>

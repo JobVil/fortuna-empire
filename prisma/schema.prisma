@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model GuildMember {
+  id String @id @default(cuid())
+  userName String
+  title String?
+  role String?
+  rank String @default("5")
+  tradeSkills TradeSkills[]
+}
+
+model TradeSkills {
+  id String @id @default(cuid())
+  guildMember GuildMember @relation(fields: [guildMemberId], references:[id])
+  guildMemberId String
+  name String
+  level String
+  numOfCraftingGear Int
+  numOfTrophies Int
+}
