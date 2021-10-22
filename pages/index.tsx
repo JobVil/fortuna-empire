@@ -7,6 +7,7 @@ import { Main } from '../components/main';
 import { Box, Container, Flex, Heading, HStack, Stack } from '@chakra-ui/layout';
 import { Button, PinInput, PinInputField, Text } from '@chakra-ui/react';
 import Router from 'next/router';
+import Layout from '../components/layout';
 
 export const onClick = (route: string) => {
 	Router.push(route);
@@ -14,7 +15,7 @@ export const onClick = (route: string) => {
 
 export default function Home() {
 	return (
-		<>
+		<Layout>
 			<Head>
 				<title>Fortuna Empire - New World</title>
 			</Head>
@@ -86,6 +87,6 @@ export default function Home() {
 					</Stack>
 				</Flex>
 			</Flex>
-		</>
+		</Layout>
 	);
 }

@@ -19,7 +19,8 @@
     "query-string": "^7.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "sass": "^1.43.2"
+    "sass": "^1.43.2",
+    "vercel": "^23.1.2"
   },
   "devDependencies": {
     "@types/node": "^16.11.1",

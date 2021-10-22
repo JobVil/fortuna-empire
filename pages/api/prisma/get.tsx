@@ -1,10 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '.prisma/client';
-
-const prisma = new PrismaClient();
+import { VercelRequest, VercelResponse } from '@vercel/node'
+import prisma from '../../../lib/prisma';
 
 /* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: VercelRequest, res: VercelResponse) => {
 	if (req.method !== 'GET') {
 		res.status(405).json({ message: 'Method not allowed', success: false });
 	}
