@@ -36,7 +36,6 @@ model Events {
   recurring String
   time DateTime
 }
-
 model Account {
   id                 String  @id @default(cuid())
   userId             String
