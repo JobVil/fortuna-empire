@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { Tab, TabList, Tabs } from "@chakra-ui/tabs";
 import React, { FC, useContext, useState } from "react";
+import { memberRoles } from "../lib/constant";
 import { EditableRankElement } from "./editable-rank-element";
 import { ExposedGuildMember, MemberContext } from "./memberContext";
 import { CustomModal } from "./modal";
@@ -106,16 +107,16 @@ export const AddMemberForm: FC = () => {
               onChange={(e) => setRoles(e as string[])}
             >
               <SimpleGrid columns={5}>
-                <Checkbox value="PVE">PVE</Checkbox>
-                <Checkbox value="PVP">PVP</Checkbox>
-                <Checkbox value="Mage">War</Checkbox>
-                <Checkbox value="Crafter">Crafter</Checkbox>
-                <Checkbox value="Gatherer">Gatherer</Checkbox>
-                <Checkbox value="Healer">Healer</Checkbox>
-                <Checkbox value="Tank">Tank</Checkbox>
-                <Checkbox value="Flanker">Flanker</Checkbox>
-                <Checkbox value="Sniper">Sniper</Checkbox>
-                <Checkbox value="Mage">Mage</Checkbox>
+                {memberRoles.map((role) => {
+                  return (
+                    <Checkbox
+                      key={"add-member-" + userName + "-" + role}
+                      value={role}
+                    >
+                      {role}
+                    </Checkbox>
+                  );
+                })}
               </SimpleGrid>
             </CheckboxGroup>
           </FormControl>
