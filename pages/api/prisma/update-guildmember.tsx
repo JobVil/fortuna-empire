@@ -13,8 +13,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const member = queryString.parse(req.body) as unknown as GuildMember;
 	const savedContact = await prisma.guildMember.upsert({
 		where: { id: member.id },
-		update: member,
-		create: member,
+		update: {
+			level: member.level,
+			rank: member.rank,
+			role: member.role,
+			title: member.title,
+			userName: member.userName,
+		},
+		create: {
+			level: member.level,
+			rank: member.rank,
+			role: member.role,
+			title: member.title,
+			userName: member.userName,
+		},
+		include: {
+			tradeSkills: true,
+		},
 	});
 	res.json(savedContact);
 };

@@ -59,6 +59,7 @@ export const UpdateMemberRoleForm: FC = () => {
       activeGuildMember.title = title;
     }
     if (roles !== null) {
+      console.log("updated roles");
       activeGuildMember.role = roles.join(",");
     }
 
@@ -121,7 +122,10 @@ export const UpdateMemberRoleForm: FC = () => {
                 <FormLabel>Member&apos;s role</FormLabel>
                 <CheckboxGroup
                   colorScheme="purple"
-                  onChange={(e) => setRoles(e as string[])}
+                  onChange={(e) => {
+                    setRoles(e as string[]);
+                    console.log(e);
+                  }}
                   defaultValue={activeGuildMember?.role?.split(",") || []}
                 >
                   <SimpleGrid columns={5}>

@@ -18,7 +18,6 @@ import {
   Text,
   Box,
 } from "@chakra-ui/react";
-import TradeSkills from "./tradeskills";
 import { SkillTable } from "../components/skill-tabel";
 import { Crafter } from "../components/crafter";
 import Layout from "../components/layout";
@@ -126,24 +125,31 @@ export const GuildMemberTables: FC<TableProps> = (props) => {
   const [tags, setTags] = useState<tag[]>(props.defaultTags || []);
   const [suggestTags, setSuggestedTags] = useState<tag[]>([]);
   useEffect(() => {
+    const defaultName = props.defaultTags
+      ? props.defaultTags.map((tags) => tags.name)
+      : [];
+    const defaultCount = defaultName.length;
     const guildMembersUsernames = guildMembers.map(
       (guildMember) => guildMember.userName
     );
     const defaultTags: tag[] = [];
     crafting.forEach((craft) => {
-      defaultTags.push({ id: defaultTags.length, name: craft });
+      defaultTags.push({ id: defaultCount + defaultTags.length, name: craft });
     });
     gathering.forEach((gather) => {
-      defaultTags.push({ id: defaultTags.length, name: gather });
+      defaultTags.push({ id: defaultCount + defaultTags.length, name: gather });
     });
     refining.forEach((refine) => {
-      defaultTags.push({ id: defaultTags.length, name: refine });
+      defaultTags.push({ id: defaultCount + defaultTags.length, name: refine });
     });
     memberRoles.forEach((role) => {
-      defaultTags.push({ id: defaultTags.length, name: role });
+      defaultTags.push({ id: defaultCount + defaultTags.length, name: role });
     });
     guildMembersUsernames.forEach((userName) => {
-      defaultTags.push({ id: defaultTags.length, name: userName });
+      defaultTags.push({
+        id: defaultCount + defaultTags.length,
+        name: userName,
+      });
     });
     setSuggestedTags(defaultTags);
   }, []);
@@ -161,6 +167,7 @@ export const GuildMemberTables: FC<TableProps> = (props) => {
             borderRadius={"md"}
           >
             <ReactTags
+              allowBackspace={false}
               tags={tags}
               suggestions={suggestTags}
               onDelete={(oldTag) => {
@@ -171,9 +178,12 @@ export const GuildMemberTables: FC<TableProps> = (props) => {
                 });
               }}
               onAddition={(newTag) => {
-                setTags((tag) => {
-                  tag.push(newTag);
-                  const newTagArray = [...tag];
+                setTags((tags) => {
+                  if (tags.map((tag) => tag.name).includes(newTag.name)) {
+                    return tags;
+                  }
+                  tags.push(newTag);
+                  const newTagArray = [...tags];
                   return newTagArray;
                 });
               }}
