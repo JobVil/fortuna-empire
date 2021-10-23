@@ -1,67 +1,58 @@
 import Link from 'next/link';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Heading, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Flex, Button } from '@chakra-ui/react';
+import Layout from '../components/layout';
+import { ExposedGuildMember, MemberContext } from '../components/memberContext';
+import { useSession } from 'next-auth/react';
+import { EditableGuildCol } from '../components/editable-leader-col';
+import { EditIcon, SmallAddIcon } from '@chakra-ui/icons';
 
-type TradeSkills = {
-	id: string;
-	guildMemberId: string;
-	name: string;
-	level: string;
-	numOfCraftingGear: number;
-	numOfTrophies: number;
-};
-
-type GuildMember = {
-	id: string;
-	userName: string;
-	title: string;
-	role?: string;
-	rank: string;
-	tradeSkills?: TradeSkills[];
+export const getRankInText = (rank: string) => {
+	switch (rank) {
+		case '4':
+			return 'member';
+		case '3':
+			return 'Officer';
+		case '2':
+			return 'Counselor';
+		case '1':
+			return 'Guild Master';
+		default:
+			return 'guest';
+	}
 };
 
 export default function Leadership() {
-	const [guildLeaders, setGuildLeaders] = useState<GuildMember[]>([]);
-	useEffect(() => {
-		fetch('api/prisma/get', { method: 'GET' }).then((data) => {
-			data.json().then((data2) => {
-				console.log(data2);
-				console.log(Object.entries(data2));
-				setGuildLeaders(data2);
-			});
-		});
-	}, []);
+	const { data: session } = useSession();
+	const { guildMembers } = useContext(MemberContext);
+	const [isEditing, setIsEditing] = useState(false);
+	const guildLeaders = guildMembers.filter((member) => Number(member.rank) <= 3);
 
-	const getRankInText = (rank: string) => {
-		switch (rank) {
-			case '4':
-				return 'member';
-			case '3':
-				return 'Officer';
-			case '2':
-				return 'Counselor';
-			case '1':
-				return 'Guild Master';
-			default:
-				return 'guest';
-		}
-	};
 	return (
 		<>
-			<Flex height={'100vh'} alignItems={'start'} justifyContent={'center'} background={'gray.800'}>
-				<Button m={'10'}>
+			<Layout>
+				<Button>
 					<Link href="/">
 						<a>Back to home</a>
 					</Link>
 				</Button>
+
 				<Flex direction={'column'} p={12} rounded={6} alignItems={'center'} justifyContent={'center'}>
 					<Heading mb={10} size={'2xl'}>
 						Company Leaders
 					</Heading>
 					<Table variant="striped" colorScheme="purple" background={'gray.100'} borderBottomRadius={'md'}>
-						<TableCaption placement={'top'} background={'gray.100'} borderTopRadius={'md'}>
+						<TableCaption placement={'top'} background={'gray.100'} borderTopRadius={'md'} position={'relative'}>
 							Company Leaders
+							{session && (
+								<Flex position={'absolute'} right={0} top={0}>
+									<Button size={'sm'} color={'red.600'} onClick={() => setIsEditing((isEditing) => !isEditing)}>
+										<EditIcon />
+										{isEditing ? 'Save Table' : 'Edit Table'}
+									</Button>
+								</Flex>
+							)}
 						</TableCaption>
 						<Thead>
 							<Tr>
@@ -72,6 +63,9 @@ export default function Leadership() {
 						</Thead>
 						<Tbody>
 							{guildLeaders.map((guildLeader) => {
+								if (isEditing) {
+									return <EditableGuildCol guildMember={guildLeader} />;
+								}
 								return (
 									<Tr key={guildLeader.id + 'guild-leader-page'}>
 										<Td>{guildLeader.userName}</Td>
@@ -90,7 +84,7 @@ export default function Leadership() {
 						</Tfoot>
 					</Table>
 				</Flex>
-			</Flex>
+			</Layout>
 		</>
 	);
 }

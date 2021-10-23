@@ -28,6 +28,7 @@ model TradeSkills {
   level String
   numOfCraftingGear Int
   numOfTrophies Int
+  @@unique([guildMemberId, name])
 }
 
 model Events {

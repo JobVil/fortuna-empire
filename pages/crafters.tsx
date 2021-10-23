@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Head from 'next/head';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 	Heading,
 	Table,
@@ -21,6 +21,13 @@ import {
 import TradeSkills from './tradeskills';
 import { SkillTable } from '../components/skill-tabel';
 import { Crafter } from '../components/crafter';
+import Layout from '../components/layout';
+import { AddMemberForm } from '../components/add-member';
+import { useSession } from 'next-auth/react';
+import { MemberContext } from '../components/memberContext';
+import ReactTags from 'react-tag-autocomplete';
+import { crafting, gathering, refining } from '../lib/constant';
+import { AddMemberSkillsForm } from '../components/add-member-skils';
 
 const crafters = {
 	Redhorn70: {
@@ -171,21 +178,72 @@ const crafters = {
 	},
 };
 
+type tag = { id: number; name: string };
+
 export default function Crafters() {
+	const { data: session } = useSession();
+	const { guildMembers } = useContext(MemberContext);
+	const [tags, setTags] = useState<tag[]>([]);
+	const [suggestTags, setSuggestedTags] = useState<tag[]>([]);
+	useEffect(() => {
+		const guildMembersUsernames = guildMembers.map((guildMember) => guildMember.userName);
+		const defaultTags: tag[] = [];
+		crafting.forEach((craft) => {
+			defaultTags.push({ id: defaultTags.length, name: craft });
+		});
+		gathering.forEach((gather) => {
+			defaultTags.push({ id: defaultTags.length, name: gather });
+		});
+		refining.forEach((refine) => {
+			defaultTags.push({ id: defaultTags.length, name: refine });
+		});
+		guildMembersUsernames.forEach((userName) => {
+			defaultTags.push({ id: defaultTags.length, name: userName });
+		});
+		setSuggestedTags(defaultTags);
+	}, []);
 	return (
 		<>
-			<Flex height={'100%'} alignItems={'start'} justifyContent={'center'} background={'gray.800'}>
+			<Layout>
 				<Button m={'10'}>
 					<Link href="/">
 						<a>Back to home</a>
 					</Link>
 				</Button>
-				<Flex direction={'column'} p={12} m={10} rounded={6} alignItems={'center'} justifyContent={'center'} h={'100%'}>
+				<Flex w={'625px'} justifyContent={'space-between'}>
+					<Flex w={'100%'}>
+						<Box backgroundColor={'white'} w={'100%'} p={2} m={2} borderRadius={'md'}>
+							<ReactTags
+								tags={tags}
+								suggestions={suggestTags}
+								onDelete={(oldTag) => {
+									setTags((tags) => {
+										tags.splice(oldTag as number, 1);
+										return tags;
+									});
+								}}
+								onAddition={(newTag) => {
+									setTags((tag) => {
+										tag.push(newTag as tag);
+										return tag;
+									});
+								}}
+							/>
+						</Box>
+					</Flex>
+					{session && (
+						<Flex direction={'column'} w={'140px'} alignSelf={'center'}>
+							<AddMemberSkillsForm />
+							<Button size={'xs'}>Edit Members Skills</Button>
+						</Flex>
+					)}
+				</Flex>
+				<Flex direction={'column'} p={12} rounded={6} alignItems={'center'} justifyContent={'center'} h={'100%'}>
 					{Object.keys(crafters).map((key) => (
 						<Crafter key={key + 'crafter-one'} playerName={key} skills={crafters[key].skills} />
 					))}
 				</Flex>
-			</Flex>
+			</Layout>
 		</>
 	);
 }
