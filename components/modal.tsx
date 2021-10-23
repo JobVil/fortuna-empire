@@ -29,6 +29,7 @@ type ModelProps = {
   closeBtnText: string;
   body: unknown;
   onClose: () => Promise<unknown>;
+  onOpen?: () => void;
 };
 
 export const CustomModal: FC<ModelProps> = (props) => {
@@ -43,9 +44,14 @@ export const CustomModal: FC<ModelProps> = (props) => {
       });
   };
 
+  const openModal = () => {
+    onOpen();
+    props.onOpen && props.onOpen();
+  };
+
   return (
     <>
-      <Button onClick={onOpen} colorScheme={"purple"} size={"sm"}>
+      <Button onClick={openModal} colorScheme={"purple"} size={"sm"}>
         {props.triggerBtnText}
       </Button>
       <Modal

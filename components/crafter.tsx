@@ -12,17 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { Tab, TabList, Tabs } from "@chakra-ui/tabs";
 import React, { FC } from "react";
+import { TradeSkills } from "./memberContext";
 import { SkillTable } from "./skill-tabel";
 
-type Skills = {
-  skillName: string;
-  level: string;
-  trophies: number;
-  craftingGear: number;
-};
-
 type props = {
-  skills: Skills[];
+  skills: TradeSkills[];
   playerName: string;
 };
 

@@ -17,7 +17,7 @@ const Header: React.FC = () => {
 
   const userInfo = (
     <Heading size="sm" marginRight={4}>
-      {session?.user.name} ({session?.user.email})
+      {session?.user.name}
     </Heading>
   );
 

@@ -17,6 +17,8 @@ export type GuildMember = {
   title: string;
   role?: string;
   rank: string;
+  level: string;
+  discordName: string;
   tradeSkills?: TradeSkills[];
 };
 
@@ -104,19 +106,23 @@ export const MemberContextProvider: FC = (props) => {
   };
 
   const upsertTradeSkills = (tradeSkills: TradeSkills[]) => {
-    setGuildMembers((guildMembers) => {
-      const newGuildMembers = cloneDeep(guildMembers).map((guildMember) => {
-        if (guildMember.id === tradeSkills[0].guildMemberId) {
-          guildMember.tradeSkills = tradeSkills;
-        }
-        return guildMember;
-      });
-      return newGuildMembers;
-    });
     tradeSkills.forEach((skill) => {
       fetch("api/prisma/upsert-trade-skills", {
         method: "POST",
         body: queryString.stringify(skill),
+      }).then((data) => {
+        data.json().then((guildMember) => {
+          const guildMemberCastedObject = guildMember as GuildMember;
+          setGuildMembers((guildMembers) => {
+            const newGuildMembers = guildMembers.map((guildMember) => {
+              if (guildMember.id === guildMemberCastedObject.id) {
+                guildMember.tradeSkills = guildMemberCastedObject.tradeSkills;
+              }
+              return guildMember;
+            });
+            return newGuildMembers;
+          });
+        });
       });
     });
   };

@@ -1,0 +1,39 @@
+diff --git a/node_modules/react-tag-autocomplete/dist/ReactTags.cjs.js b/node_modules/react-tag-autocomplete/dist/ReactTags.cjs.js
+index 1cfcfaa..ff9b41c 100644
+--- a/node_modules/react-tag-autocomplete/dist/ReactTags.cjs.js
++++ b/node_modules/react-tag-autocomplete/dist/ReactTags.cjs.js
+@@ -231,7 +231,7 @@ function pressDownKey (e) {
+ function pressBackspaceKey () {
+   // when backspace key is pressed and query is blank, delete the last tag
+   if (!this.state.query.length) {
+-    this.deleteTag(this.props.tags.length - 1);
++    // this.deleteTag(this.props.tags.length - 1);
+   }
+ }
+ 
+diff --git a/node_modules/react-tag-autocomplete/dist/ReactTags.esm.js b/node_modules/react-tag-autocomplete/dist/ReactTags.esm.js
+index 7aba4a4..5db7ba2 100644
+--- a/node_modules/react-tag-autocomplete/dist/ReactTags.esm.js
++++ b/node_modules/react-tag-autocomplete/dist/ReactTags.esm.js
+@@ -224,7 +224,7 @@ function pressDownKey (e) {
+ function pressBackspaceKey () {
+   // when backspace key is pressed and query is blank, delete the last tag
+   if (!this.state.query.length) {
+-    this.deleteTag(this.props.tags.length - 1);
++    // this.deleteTag(this.props.tags.length - 1);
+   }
+ }
+ 
+diff --git a/node_modules/react-tag-autocomplete/dist/ReactTags.umd.js b/node_modules/react-tag-autocomplete/dist/ReactTags.umd.js
+index 1c9a2b0..603a6f7 100644
+--- a/node_modules/react-tag-autocomplete/dist/ReactTags.umd.js
++++ b/node_modules/react-tag-autocomplete/dist/ReactTags.umd.js
+@@ -255,7 +255,7 @@
+   function pressBackspaceKey () {
+     // when backspace key is pressed and query is blank, delete the last tag
+     if (!this.state.query.length) {
+-      this.deleteTag(this.props.tags.length - 1);
++      // this.deleteTag(this.props.tags.length - 1);
+     }
+   }
+ 

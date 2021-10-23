@@ -11,28 +11,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 
 	const member = queryString.parse(req.body) as unknown as GuildMember;
-
-	if (member.tradeSkills) {
-		res.status(200).json(req.body);
-		const updateSkills = member.tradeSkills.filter((tradeSkill) => !!tradeSkill.id);
-
-		const createdSkills = member.tradeSkills.filter((tradeSkill) => !tradeSkill.id);
-		const savedTradeSkills = await prisma.tradeSkills.updateMany({
-			where: {
-				guildMemberId: member.id,
-			},
-			data: updateSkills,
-		});
-		const createdTradeSkills = await prisma.tradeSkills.createMany({
-			data: createdSkills,
-		});
-		res.json(createdTradeSkills);
-	} else {
-		const savedContact = await prisma.guildMember.upsert({
-			where: { id: member.id },
-			update: member,
-			create: member,
-		});
-		res.json(savedContact);
-	}
+	const savedContact = await prisma.guildMember.upsert({
+		where: { id: member.id },
+		update: member,
+		create: member,
+	});
+	res.json(savedContact);
 };

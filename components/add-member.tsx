@@ -26,6 +26,7 @@ export const AddMemberForm: FC = () => {
   const [rank, setRank] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [roles, setRoles] = useState<string[]>();
+  const [level, setLevel] = useState<string>("0");
 
   const onAddMemberClick = async () => {
     if (!rank || !userName) {
@@ -49,6 +50,8 @@ export const AddMemberForm: FC = () => {
       userName: userName.trim(),
       rank,
       title,
+      level,
+      discordName: "",
       role: roles.join(","),
     };
     addGuildMember(guildMember);
@@ -87,6 +90,13 @@ export const AddMemberForm: FC = () => {
             <Input
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex: Recruiting officer"
+            />
+          </FormControl>
+          <FormControl id="guild-members-level" marginBottom={3}>
+            <FormLabel>Member&apos;s level</FormLabel>
+            <Input
+              onChange={(e) => setLevel(e.target.value)}
+              placeholder="ex: 60"
             />
           </FormControl>
           <FormControl id="guild-members-role">

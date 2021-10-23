@@ -13,10 +13,12 @@ datasource db {
 
 model GuildMember {
   id String @id @default(cuid())
-  userName String
+  userName String @unique
   title String?
   role String?
   rank String @default("5")
+  level String @default("0")
+  discordName String @default("")
   tradeSkills TradeSkills[]
 }
 

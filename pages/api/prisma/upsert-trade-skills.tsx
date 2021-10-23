@@ -53,6 +53,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				},
 			},
 		},
+		include:{
+			tradeSkills: true
+		}
 	});
 
 	// const createdTradeSkills = await prisma.tradeSkills.create({

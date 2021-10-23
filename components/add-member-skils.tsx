@@ -123,7 +123,7 @@ export const AddMemberSkillsForm: FC = () => {
           >
             <TableCaption placement={"top"}>
               <EditableGuildMember
-                defaultValue={guildMembers[0]?.userName || ""}
+                defaultValue={userName || ""}
                 onChange={setUserName}
               />
             </TableCaption>
@@ -137,7 +137,7 @@ export const AddMemberSkillsForm: FC = () => {
             </Thead>
             <Tbody>
               {skills.map((skill) => (
-                <Tr key={skill + "adding-skill-model"+userName}>
+                <Tr key={skill + "adding-skill-model" + userName}>
                   <Td>{skill}</Td>
                   <Td>
                     <EditableRow

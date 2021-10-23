@@ -10,16 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { Tab, TabList, Tabs } from "@chakra-ui/tabs";
 import React, { FC } from "react";
-
-type Skills = {
-  skillName: string;
-  level: string;
-  trophies: number;
-  craftingGear: number;
-};
+import { TradeSkills } from "./memberContext";
 
 type props = {
-  skills: Skills[];
+  skills: TradeSkills[];
   id: string;
 };
 
@@ -41,11 +35,11 @@ export const SkillTable: FC<props> = (props) => {
       </Thead>
       <Tbody>
         {props.skills.map((skill) => (
-          <Tr key={props.id + skill.skillName}>
-            <Td>{skill.skillName}</Td>
+          <Tr key={props.id + skill.name}>
+            <Td>{skill.name}</Td>
             <Td>{skill.level}</Td>
-            <Td>{`${skill.craftingGear}/6`}</Td>
-            <Td>{`${skill.craftingGear}/6`}</Td>
+            <Td>{`${skill.numOfCraftingGear}/6`}</Td>
+            <Td>{`${skill.numOfTrophies}/3`}</Td>
           </Tr>
         ))}
       </Tbody>
