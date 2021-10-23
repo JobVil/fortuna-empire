@@ -30,7 +30,7 @@ a {
 
 .react-tags__selected button::after{
   position: absolute;
-  top: -35px;
+  top: -36px;
   bottom: 0;
   right: 8px;
   content: "\2715"; /* use the hex value here... */

@@ -41,26 +41,27 @@ export default function Home() {
 					<Button w={'200px'} h={'200px'} onClick={() => onClick('/leader')} colorScheme={'purple'}>
 						Leadership
 					</Button>
-					<Button w={'200px'} h={'200px'} colorScheme={'purple'}>
-						War Leadership
+					<Button w={'200px'} h={'200px'} onClick={() => onClick('/war')} colorScheme={'purple'}>
+						War
 					</Button>
 					<Button w={'200px'} h={'200px'} onClick={() => onClick('/crafters')} colorScheme={'purple'}>
 						Crafter&apos;s
 					</Button>
-					<Button w={'200px'} h={'200px'} colorScheme={'purple'}>
+					<Button w={'200px'} h={'200px'} onClick={() => onClick('/gathers')} colorScheme={'purple'}>
 						Gathers
 					</Button>
-					<Button w={'200px'} h={'200px'} colorScheme={'purple'}>
-						PVP Events
+					<Button w={'200px'} h={'200px'} onClick={() => onClick('/refiners')} colorScheme={'purple'}>
+						Refiners
 					</Button>
 				</HStack>
 				<HStack>
-					<Button w={'200px'} h={'200px'} onClick={() => onClick('/leader')} colorScheme={'purple'}>
-						PVE Events
+					<Button w={'200px'} h={'200px'} onClick={() => onClick('/pvp')} colorScheme={'purple'}>
+						PVP Members
 					</Button>
-					<Button w={'200px'} h={'200px'} colorScheme={'purple'}>
-						Trade Skills
+					<Button w={'200px'} h={'200px'} onClick={() => onClick('/pve')} colorScheme={'purple'}>
+						PVE Members
 					</Button>
+
 					<Button w={'200px'} h={'200px'} colorScheme={'purple'}>
 						*TBD
 					</Button>
