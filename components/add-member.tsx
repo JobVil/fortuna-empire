@@ -57,6 +57,11 @@ export const AddMemberForm: FC = () => {
         role: roles?.join(",") || "",
       };
       addGuildMember(guildMember);
+      setUserName("");
+      setRank(null);
+      setTitle(null);
+      setLevel(null);
+      setRoles(null);
     } catch (error) {
       console.error(error);
     }
@@ -85,10 +90,7 @@ export const AddMemberForm: FC = () => {
           </FormControl>
           <FormControl id="guild-members-rank" isRequired marginBottom={3}>
             <FormLabel>Member&apos;s Rank</FormLabel>
-            <EditableRankElement
-              defaultValue={"Select rank"}
-              onChange={setRank}
-            />
+            <EditableRankElement onChange={setRank} />
           </FormControl>
           <FormControl id="guild-members-title" marginBottom={3}>
             <FormLabel>Member&apos;s title</FormLabel>

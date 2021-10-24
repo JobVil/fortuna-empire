@@ -2,12 +2,12 @@ import { Select } from "@chakra-ui/react";
 import React, { FC } from "react";
 
 type EditableRankElementProps = {
-  defaultValue: string;
+  defaultValue?: string;
   onChange: (nextValue: string) => void;
 };
 
 export const EditableRankElement: FC<EditableRankElementProps> = (props) => {
-  const ranks = ["Settler", "Officer", "Consul", "Governor"];
+  const ranks = ["Settler", "Officer", "Counselor", "Governor"];
   const setRankWrapper = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const rankIndex = ranks.reverse().indexOf(e.target.value);
     if (rankIndex !== -1) {
@@ -16,7 +16,7 @@ export const EditableRankElement: FC<EditableRankElementProps> = (props) => {
   };
   return (
     <Select
-      placeholder={props.defaultValue}
+      defaultValue={props.defaultValue || ranks[0]}
       colorScheme={"purple"}
       onChange={setRankWrapper}
     >

@@ -11,13 +11,13 @@ import { EditIcon, SmallAddIcon } from '@chakra-ui/icons';
 export const getRankInText = (rank: string) => {
 	switch (rank) {
 		case '4':
-			return 'member';
+			return 'Settler';
 		case '3':
 			return 'Officer';
 		case '2':
 			return 'Counselor';
 		case '1':
-			return 'Guild Master';
+			return 'Governor';
 		default:
 			return 'guest';
 	}

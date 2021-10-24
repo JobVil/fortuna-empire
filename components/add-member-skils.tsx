@@ -12,6 +12,7 @@ import {
   Input,
   Select,
   SimpleGrid,
+  Spinner,
   Table,
   TableCaption,
   TabPanel,
@@ -47,6 +48,7 @@ type SimpleGridTradeSkills = Omit<TradeSkills, "id">;
 
 export const AddMemberSkillsForm: FC = () => {
   const { guildMembers, upsertTradeSkills } = useContext(MemberContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [userName, setUserName] = useState<string>(
     guildMembers[0]?.userName || ""
   );
@@ -62,8 +64,10 @@ export const AddMemberSkillsForm: FC = () => {
     });
 
   const selectUser = (userName: string) => {
+    setIsLoading(true);
     setUpdatedSkills({});
     setUserName(userName);
+    setTimeout(() => setIsLoading(false), 200);
   };
   const onAddMemberSkills = async () => {
     try {
@@ -145,62 +149,72 @@ export const AddMemberSkillsForm: FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {skills.map((skill) => (
-                <Tr key={skill + "adding-skill-model" + userName}>
-                  <Td>{skill}</Td>
-                  <Td>
-                    <EditableRow
-                      defaultValue={
-                        existingTradeSkillObjMain[skill]?.level || "0"
-                      }
-                      onChange={(newLevel) =>
-                        setUpdatedSkills((updatedSkills) => {
-                          updatedSkills[skill] = {
-                            ...updatedSkills[skill],
-                            ...{ level: newLevel },
-                          };
-                          return updatedSkills;
-                        })
-                      }
-                    />
-                  </Td>
-                  <Td>
-                    <EditableRow
-                      defaultValue={
-                        existingTradeSkillObjMain[skill]?.numOfCraftingGear ||
-                        "0"
-                      }
-                      onChange={(newGearNumber) =>
-                        setUpdatedSkills((updatedSkills) => {
-                          updatedSkills[skill] = {
-                            ...updatedSkills[skill],
-                            ...{ numOfCraftingGear: Number(newGearNumber) },
-                          };
-                          return updatedSkills;
-                        })
-                      }
-                    />
-                    /6
-                  </Td>
-                  <Td>
-                    <EditableRow
-                      defaultValue={
-                        existingTradeSkillObjMain[skill]?.numOfTrophies || "0"
-                      }
-                      onChange={(newTrophiesNumber) =>
-                        setUpdatedSkills((updatedSkills) => {
-                          updatedSkills[skill] = {
-                            ...updatedSkills[skill],
-                            ...{ numOfTrophies: Number(newTrophiesNumber) },
-                          };
-                          return updatedSkills;
-                        })
-                      }
-                    />
-                    /3
-                  </Td>
-                </Tr>
-              ))}
+              {isLoading ? (
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="purple.500"
+                  size="xl"
+                />
+              ) : (
+                skills.map((skill) => (
+                  <Tr key={skill + "adding-skill-model" + userName}>
+                    <Td>{skill}</Td>
+                    <Td>
+                      <EditableRow
+                        defaultValue={
+                          existingTradeSkillObjMain[skill]?.level || "0"
+                        }
+                        onChange={(newLevel) =>
+                          setUpdatedSkills((updatedSkills) => {
+                            updatedSkills[skill] = {
+                              ...updatedSkills[skill],
+                              ...{ level: newLevel },
+                            };
+                            return updatedSkills;
+                          })
+                        }
+                      />
+                    </Td>
+                    <Td>
+                      <EditableRow
+                        defaultValue={
+                          existingTradeSkillObjMain[skill]?.numOfCraftingGear ||
+                          "0"
+                        }
+                        onChange={(newGearNumber) =>
+                          setUpdatedSkills((updatedSkills) => {
+                            updatedSkills[skill] = {
+                              ...updatedSkills[skill],
+                              ...{ numOfCraftingGear: Number(newGearNumber) },
+                            };
+                            return updatedSkills;
+                          })
+                        }
+                      />
+                      /6
+                    </Td>
+                    <Td>
+                      <EditableRow
+                        defaultValue={
+                          existingTradeSkillObjMain[skill]?.numOfTrophies || "0"
+                        }
+                        onChange={(newTrophiesNumber) =>
+                          setUpdatedSkills((updatedSkills) => {
+                            updatedSkills[skill] = {
+                              ...updatedSkills[skill],
+                              ...{ numOfTrophies: Number(newTrophiesNumber) },
+                            };
+                            return updatedSkills;
+                          })
+                        }
+                      />
+                      /3
+                    </Td>
+                  </Tr>
+                ))
+              )}
             </Tbody>
           </Table>
         </Container>

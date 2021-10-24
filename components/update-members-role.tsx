@@ -38,10 +38,15 @@ export const UpdateMemberRoleForm: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [roles, setRoles] = useState<string[]>(null);
 
-  useEffect(() => {
+  const selectUser = (userName: string) => {
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 500);
-  }, [userName]);
+    setRank(null);
+    setTitle(null);
+    setLevel(null);
+    setRoles(null);
+    setUserName(userName);
+    setTimeout(() => setIsLoading(false), 200);
+  };
 
   const onAddMemberClick = async () => {
     if (!activeGuildMember || !activeGuildMember.rank) {
@@ -83,7 +88,7 @@ export const UpdateMemberRoleForm: FC = () => {
           <FormControl id="guild-members-name" isRequired marginBottom={3}>
             <EditableGuildMember
               defaultValue={userName || ""}
-              onChange={setUserName}
+              onChange={selectUser}
             />
           </FormControl>
           {isLoading ? (
