@@ -79,11 +79,9 @@ export const AddMemberSkillsForm: FC = () => {
           return reject("unable to update member");
         });
       }
-      const existingTradeSkillObj: { [key in string]: { id: string } } = {};
+      const existingTradeSkillObj: { [key in string]: TradeSkills } = {};
       editEditingGuildMember.tradeSkills?.forEach((existingTradeSkill) => {
-        existingTradeSkillObj[existingTradeSkill.name] = {
-          id: existingTradeSkill.id,
-        };
+        existingTradeSkillObj[existingTradeSkill.name] = existingTradeSkill;
       });
       const newTradeSkills = Object.keys(updatedSkills).map(
         (skill): SimpleGridTradeSkills | TradeSkills => {
@@ -92,9 +90,18 @@ export const AddMemberSkillsForm: FC = () => {
               id: existingTradeSkillObj[skill].id,
               guildMemberId: editEditingGuildMember.id,
               name: skill,
-              level: updatedSkills[skill].level || "0",
-              numOfCraftingGear: updatedSkills[skill].numOfCraftingGear || 0,
-              numOfTrophies: updatedSkills[skill].numOfTrophies || 0,
+              level:
+                updatedSkills[skill].level ||
+                existingTradeSkillObj[skill].level ||
+                "0",
+              numOfCraftingGear:
+                updatedSkills[skill].numOfCraftingGear ||
+                existingTradeSkillObj[skill].numOfCraftingGear ||
+                0,
+              numOfTrophies:
+                updatedSkills[skill].numOfTrophies ||
+                existingTradeSkillObj[skill].numOfTrophies ||
+                0,
             };
           }
           return {
