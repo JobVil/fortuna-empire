@@ -25,7 +25,7 @@ export const AddMemberForm: FC = () => {
   const { guildMembers, addGuildMember } = useContext(MemberContext);
   const [userName, setUserName] = useState<string>();
   const [rank, setRank] = useState<string>(guildRanks[0]);
-  const [title, setTitle] = useState<string>();
+  const [title, setTitle] = useState<string>("");
   const [roles, setRoles] = useState<string[]>();
   const [level, setLevel] = useState<string>("0");
 
@@ -39,8 +39,10 @@ export const AddMemberForm: FC = () => {
 
       const guildMemberWithThisUsername = guildMembers.filter(
         (guildMember) =>
+          guildMember &&
+          guildMember.userName &&
           guildMember.userName.toLocaleLowerCase() ===
-          userName.trim().toLocaleLowerCase()
+            userName.trim().toLocaleLowerCase()
       );
 
       if (guildMemberWithThisUsername.length > 0) {
@@ -59,8 +61,8 @@ export const AddMemberForm: FC = () => {
       addGuildMember(guildMember);
       setUserName("");
       setRank(guildRanks[0]);
-      setTitle(null);
-      setLevel(null);
+      setTitle("");
+      setLevel("0");
       setRoles(null);
     } catch (error) {
       console.error(error);
