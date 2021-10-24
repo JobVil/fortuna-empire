@@ -35,10 +35,15 @@ type ModelProps = {
 export const CustomModal: FC<ModelProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [errorMsg, setErrorMsg] = useState("");
+
+  const onCloseWrapper = () => {
+    setErrorMsg("");
+    onClose();
+  };
   const onModalAction = () => {
     props
       .onClose()
-      .then(() => onClose())
+      .then(() => onCloseWrapper())
       .catch((error) => {
         setErrorMsg(error);
       });
@@ -56,7 +61,7 @@ export const CustomModal: FC<ModelProps> = (props) => {
       </Button>
       <Modal
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={onCloseWrapper}
         colorScheme={"purple"}
         size={"2xl"}
       >
@@ -79,7 +84,7 @@ export const CustomModal: FC<ModelProps> = (props) => {
             <Button colorScheme={"purple"} mr={3} onClick={onModalAction}>
               {props.closeBtnText}
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={onCloseWrapper}>
               Cancel
             </Button>
           </ModalFooter>

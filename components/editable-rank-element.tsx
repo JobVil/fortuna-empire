@@ -1,5 +1,6 @@
 import { Select } from "@chakra-ui/react";
 import React, { FC } from "react";
+import { guildRanks } from "../lib/constant";
 
 type EditableRankElementProps = {
   defaultValue?: string;
@@ -7,20 +8,19 @@ type EditableRankElementProps = {
 };
 
 export const EditableRankElement: FC<EditableRankElementProps> = (props) => {
-  const ranks = ["Settler", "Officer", "Counselor", "Governor"];
   const setRankWrapper = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const rankIndex = ranks.reverse().indexOf(e.target.value);
+    const rankIndex = guildRanks.reverse().indexOf(e.target.value);
     if (rankIndex !== -1) {
       props.onChange(String(rankIndex + 1));
     }
   };
   return (
     <Select
-      defaultValue={props.defaultValue || ranks[0]}
+      defaultValue={props.defaultValue || guildRanks[0]}
       colorScheme={"purple"}
       onChange={setRankWrapper}
     >
-      {ranks.map((rank) => (
+      {guildRanks.map((rank) => (
         <option key={"add-member-rank-" + rank}>{rank}</option>
       ))}
     </Select>

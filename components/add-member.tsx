@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { Tab, TabList, Tabs } from "@chakra-ui/tabs";
 import React, { FC, useContext, useState } from "react";
-import { memberRoles } from "../lib/constant";
+import { guildRanks, memberRoles } from "../lib/constant";
 import { EditableRankElement } from "./editable-rank-element";
 import { ExposedGuildMember, MemberContext } from "./memberContext";
 import { CustomModal } from "./modal";
@@ -24,7 +24,7 @@ import { CustomModal } from "./modal";
 export const AddMemberForm: FC = () => {
   const { guildMembers, addGuildMember } = useContext(MemberContext);
   const [userName, setUserName] = useState<string>();
-  const [rank, setRank] = useState<string>();
+  const [rank, setRank] = useState<string>(guildRanks[0]);
   const [title, setTitle] = useState<string>();
   const [roles, setRoles] = useState<string[]>();
   const [level, setLevel] = useState<string>("0");
