@@ -39,83 +39,95 @@ const doesArraysIntersection = (array1: string[], array2: string[]) =>
   array1.filter((item1) => array2.includes(item1)).length > 0;
 
 const applyFilterToMembers = (filters: tag[], guildMembers: GuildMember[]) => {
-  const memberNames = guildMembers.map((member) => member.userName);
-  const tradeSkillFilter = filters
-    .filter(
-      (filter) =>
-        crafting.includes(filter.name) ||
-        gathering.includes(filter.name) ||
-        refining.includes(filter.name)
-    )
-    .map((filter) => filter.name);
-  const roleFilters = filters
-    .filter((filter) => memberRoles.includes(filter.name))
-    ?.map((filter) => filter.name);
-  const playerNames = filters.filter((filter) =>
-    memberNames.includes(filter.name)
-  );
-  const appliedFilter = guildMembers.filter((member) => {
-    if (playerNames.length > 0 && roleFilters.length > 0) {
-      return (
-        memberNames.includes(member.userName) &&
-        doesArraysIntersection(roleFilters, member.role?.split(",") || [])
-      );
-    } else if (playerNames.length > 0) {
-      return memberNames.includes(member.userName);
-    } else if (roleFilters.length > 0) {
-      return doesArraysIntersection(roleFilters, member.role?.split(",") || []);
-    } else if (tradeSkillFilter.length > 0) {
-      return (
-        !!member.tradeSkills &&
-        member.tradeSkills.filter((skill) =>
-          tradeSkillFilter.includes(skill.name)
-        ).length > 0
-      );
-    } else {
-      return true;
-    }
-  });
-
-  if (tradeSkillFilter.length > 0) {
-    return appliedFilter
-      .sort((a, b) => {
-        const valueA = a
-          .tradeSkills!.filter((skill) => tradeSkillFilter.includes(skill.name))
-          .map((skill) => Number(skill.level))
-          .reduce((accum, value) => accum + value);
-        const valueB = b
-          .tradeSkills!.filter((skill) => tradeSkillFilter.includes(skill.name))
-          .map((skill) => Number(skill.level))
-          .reduce((accum, value) => accum + value);
-        console.log(valueA, valueB);
-        if (valueA > valueB) {
-          return -1;
-        } else {
-          return 1;
-        }
-      })
-      .map((members, index) => {
+  try {
+    const memberNames = guildMembers.map((member) => member.userName);
+    const tradeSkillFilter = filters
+      .filter(
+        (filter) =>
+          crafting.includes(filter.name) ||
+          gathering.includes(filter.name) ||
+          refining.includes(filter.name)
+      )
+      .map((filter) => filter.name);
+    const roleFilters = filters
+      .filter((filter) => memberRoles.includes(filter.name))
+      ?.map((filter) => filter.name);
+    const playerNames = filters.filter((filter) =>
+      memberNames.includes(filter.name)
+    );
+    const appliedFilter = guildMembers.filter((member) => {
+      if (playerNames.length > 0 && roleFilters.length > 0) {
         return (
-          <Crafter
-            key={members.userName + "tradeSkill-in-serach" + index}
-            playerName={members.userName}
-            skills={members.tradeSkills!.filter((skill) =>
+          memberNames.includes(member.userName) &&
+          doesArraysIntersection(roleFilters, member.role?.split(",") || [])
+        );
+      } else if (playerNames.length > 0) {
+        return memberNames.includes(member.userName);
+      } else if (roleFilters.length > 0) {
+        return doesArraysIntersection(
+          roleFilters,
+          member.role?.split(",") || []
+        );
+      } else if (tradeSkillFilter.length > 0) {
+        return (
+          !!member.tradeSkills &&
+          member.tradeSkills.filter((skill) =>
+            tradeSkillFilter.includes(skill.name)
+          ).length > 0
+        );
+      } else {
+        return true;
+      }
+    });
+
+    if (tradeSkillFilter.length > 0) {
+      return appliedFilter
+        .sort((a, b) => {
+          const valueA = a
+            .tradeSkills!.filter((skill) =>
               tradeSkillFilter.includes(skill.name)
-            )}
+            )
+            .map((skill) => Number(skill.level))
+            .reduce((accum, value) => accum + value);
+          const valueB = b
+            .tradeSkills!.filter((skill) =>
+              tradeSkillFilter.includes(skill.name)
+            )
+            .map((skill) => Number(skill.level))
+            .reduce((accum, value) => accum + value);
+          console.log(valueA, valueB);
+          if (valueA > valueB) {
+            return -1;
+          } else {
+            return 1;
+          }
+        })
+        .map((members, index) => {
+          return (
+            <Crafter
+              key={members.userName + "tradeSkill-in-serach" + index}
+              playerName={members.userName}
+              skills={members.tradeSkills!.filter((skill) =>
+                tradeSkillFilter.includes(skill.name)
+              )}
+            />
+          );
+        });
+    } else {
+      return appliedFilter.map((members, index) => {
+        return (
+          <PlayerNameLevelRole
+            key={members.userName + "player-infor-in-serach" + index}
+            level={members.level}
+            playerName={members.userName}
+            roles={members.role || ""}
           />
         );
       });
-  } else {
-    return appliedFilter.map((members, index) => {
-      return (
-        <PlayerNameLevelRole
-          key={members.userName + "player-infor-in-serach" + index}
-          level={members.level}
-          playerName={members.userName}
-          roles={members.role || ""}
-        />
-      );
-    });
+    }
+  } catch (error) {
+    console.error(error);
+    return guildMembers;
   }
 };
 
@@ -125,36 +137,52 @@ export const GuildMemberTables: FC<TableProps> = (props) => {
   const [tags, setTags] = useState<tag[]>(props.defaultTags || []);
   const [suggestTags, setSuggestedTags] = useState<tag[]>([]);
   useEffect(() => {
-    const defaultName = props.defaultTags
-      ? props.defaultTags.map((tags) => tags.name)
-      : [];
-    const defaultCount = defaultName.length;
-    const guildMembersUsernames = guildMembers.map(
-      (guildMember) => guildMember.userName
-    );
-    const defaultTags: tag[] = [];
-    crafting.forEach((craft) => {
-      defaultTags.push({ id: defaultCount + defaultTags.length, name: craft });
-    });
-    gathering.forEach((gather) => {
-      defaultTags.push({ id: defaultCount + defaultTags.length, name: gather });
-    });
-    refining.forEach((refine) => {
-      defaultTags.push({ id: defaultCount + defaultTags.length, name: refine });
-    });
-    memberRoles.forEach((role) => {
-      defaultTags.push({ id: defaultCount + defaultTags.length, name: role });
-    });
-    guildMembersUsernames.forEach((userName) => {
-      defaultTags.push({
-        id: defaultCount + defaultTags.length,
-        name: userName,
+    try {
+      const defaultName = props.defaultTags
+        ? props.defaultTags.map((tags) => tags.name)
+        : [];
+      const defaultCount = defaultName.length;
+      const guildMembersUsernames = guildMembers.map(
+        (guildMember) => guildMember.userName
+      );
+      const defaultTags: tag[] = [];
+      crafting.forEach((craft) => {
+        defaultTags.push({
+          id: defaultCount + defaultTags.length,
+          name: craft,
+        });
       });
-    });
-    setSuggestedTags(defaultTags);
-  }, []);
+      gathering.forEach((gather) => {
+        defaultTags.push({
+          id: defaultCount + defaultTags.length,
+          name: gather,
+        });
+      });
+      refining.forEach((refine) => {
+        defaultTags.push({
+          id: defaultCount + defaultTags.length,
+          name: refine,
+        });
+      });
+      memberRoles.forEach((role) => {
+        defaultTags.push({ id: defaultCount + defaultTags.length, name: role });
+      });
+      guildMembersUsernames.forEach((userName) => {
+        defaultTags.push({
+          id: defaultCount + defaultTags.length,
+          name: userName,
+        });
+      });
+      setSuggestedTags(defaultTags);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [guildMembers.length]);
 
-  useEffect(() => console.log("re-render"));
+  if (guildMembers.length <= 1) {
+    return <></>;
+  }
+
   return (
     <>
       <Flex w={"625px"} justifyContent={"space-between"}>

@@ -5,14 +5,16 @@ import { ExposedGuildMember } from '../../../components/memberContext';
 
 /* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-	if (req.method !== 'POST') {
-		res.status(405).json({ message: 'Method not allowed', success: false });
+	try {
+		if (req.method !== 'POST') {
+			res.status(405).json({ message: 'Method not allowed', success: false });
+		}
+		const member = queryString.parse(req.body) as unknown as ExposedGuildMember;
+		const savedContact = await prisma.guildMember.create({
+			data: member,
+		});
+		res.json(savedContact);
+	} catch (error) {
+		res.status(405).json({ message: error, success: false });
 	}
-
-	const member = queryString.parse(req.body) as unknown as ExposedGuildMember;
-
-	const savedContact = await prisma.guildMember.create({
-		data: member,
-	});
-	res.json(savedContact);
 };

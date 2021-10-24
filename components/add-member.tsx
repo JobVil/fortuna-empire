@@ -30,32 +30,36 @@ export const AddMemberForm: FC = () => {
   const [level, setLevel] = useState<string>("0");
 
   const onAddMemberClick = async () => {
-    if (!rank || !userName) {
-      return new Promise((resolve, reject) => {
-        return reject("Username and Rank are required");
-      });
-    }
+    try {
+      if (!rank || !userName) {
+        return new Promise((resolve, reject) => {
+          return reject("Username and Rank are required");
+        });
+      }
 
-    const guildMemberWithThisUsername = guildMembers.filter(
-      (guildMember) =>
-        guildMember.userName.toLocaleLowerCase() ===
-        userName.trim().toLocaleLowerCase()
-    );
+      const guildMemberWithThisUsername = guildMembers.filter(
+        (guildMember) =>
+          guildMember.userName.toLocaleLowerCase() ===
+          userName.trim().toLocaleLowerCase()
+      );
 
-    if (guildMemberWithThisUsername.length > 0) {
-      return new Promise((resolve, reject) => {
-        return reject("member with that name already exists");
-      });
+      if (guildMemberWithThisUsername.length > 0) {
+        return new Promise((resolve, reject) => {
+          return reject("member with that name already exists");
+        });
+      }
+      const guildMember: ExposedGuildMember = {
+        userName: userName.trim(),
+        rank,
+        title,
+        level,
+        discordName: "",
+        role: roles.join(","),
+      };
+      addGuildMember(guildMember);
+    } catch (error) {
+      console.error(error);
     }
-    const guildMember: ExposedGuildMember = {
-      userName: userName.trim(),
-      rank,
-      title,
-      level,
-      discordName: "",
-      role: roles.join(","),
-    };
-    addGuildMember(guildMember);
   };
 
   return (
