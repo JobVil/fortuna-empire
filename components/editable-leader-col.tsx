@@ -5,6 +5,7 @@ import { EditableGuildMember } from "./editable-guild-member";
 import { EditableRankElement } from "./editable-rank-element";
 import { EditableRow } from "./editable-row";
 import { GuildMember, MemberContext } from "./memberContext";
+import { debounce } from "lodash";
 
 type EditableGuildColProps = {
   guildMember: GuildMember;
@@ -13,7 +14,7 @@ type EditableGuildColProps = {
 export const EditableGuildCol: FC<EditableGuildColProps> = (props) => {
   const { guildMembers, updateGuildMember } = useContext(MemberContext);
 
-  const onRenameUser = (newName: string) => {
+  const onRenameUser = debounce((newName: string) => {
     if (newName) {
       const guildMemberClone = {
         ...props.guildMember,
@@ -21,8 +22,8 @@ export const EditableGuildCol: FC<EditableGuildColProps> = (props) => {
       };
       updateGuildMember(guildMemberClone);
     }
-  };
-  const onRenameTitle = (newTile: string) => {
+  }, 2000);
+  const onRenameTitle = debounce((newTile: string) => {
     if (newTile) {
       const guildMemberClone = {
         ...props.guildMember,
@@ -30,8 +31,8 @@ export const EditableGuildCol: FC<EditableGuildColProps> = (props) => {
       };
       updateGuildMember(guildMemberClone);
     }
-  };
-  const onRankChange = (newRank: string) => {
+  }, 2000);
+  const onRankChange = debounce((newRank: string) => {
     if (newRank) {
       const guildMemberClone = {
         ...props.guildMember,
@@ -39,7 +40,7 @@ export const EditableGuildCol: FC<EditableGuildColProps> = (props) => {
       };
       updateGuildMember(guildMemberClone);
     }
-  };
+  }, 2000);
   return (
     <>
       <Tr key={props.guildMember.id + "guild-leader-page"}>
