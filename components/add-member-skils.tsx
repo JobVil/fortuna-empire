@@ -55,12 +55,16 @@ export const AddMemberSkillsForm: FC = () => {
   const existingTradeSkillObjMain: { [key in string]: TradeSkills } = {};
   guildMembers
     ?.filter((gm) => gm.userName === userName)[0]
-    ?.tradeSkills.forEach((existingTradeSkill) => {
+    ?.tradeSkills?.forEach((existingTradeSkill) => {
       existingTradeSkillObjMain[existingTradeSkill.name] = {
         ...existingTradeSkill,
       };
     });
 
+  const selectUser = (userName: string) => {
+    setUpdatedSkills({});
+    setUserName(userName);
+  };
   const onAddMemberSkills = async () => {
     try {
       const editEditingGuildMember = guildMembers.filter(
@@ -72,7 +76,7 @@ export const AddMemberSkillsForm: FC = () => {
         });
       }
       const existingTradeSkillObj: { [key in string]: { id: string } } = {};
-      editEditingGuildMember.tradeSkills.forEach((existingTradeSkill) => {
+      editEditingGuildMember.tradeSkills?.forEach((existingTradeSkill) => {
         existingTradeSkillObj[existingTradeSkill.name] = {
           id: existingTradeSkill.id,
         };
@@ -99,6 +103,8 @@ export const AddMemberSkillsForm: FC = () => {
         }
       ) as TradeSkills[];
       upsertTradeSkills(newTradeSkills);
+      // reset state between updates
+      setUpdatedSkills({});
     } catch (error) {
       console.error(error);
     }
@@ -127,7 +133,7 @@ export const AddMemberSkillsForm: FC = () => {
             <TableCaption placement={"top"}>
               <EditableGuildMember
                 defaultValue={userName || ""}
-                onChange={setUserName}
+                onChange={selectUser}
               />
             </TableCaption>
             <Thead>

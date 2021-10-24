@@ -60,7 +60,7 @@ export const UpdateMemberRoleForm: FC = () => {
     }
     if (roles !== null) {
       console.log("updated roles");
-      activeGuildMember.role = roles.join(",");
+      activeGuildMember.role = roles?.join(",") || "";
     }
 
     updateGuildMember(activeGuildMember);

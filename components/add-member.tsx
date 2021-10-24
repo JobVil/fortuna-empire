@@ -54,7 +54,7 @@ export const AddMemberForm: FC = () => {
         title,
         level,
         discordName: "",
-        role: roles.join(","),
+        role: roles?.join(",") || "",
       };
       addGuildMember(guildMember);
     } catch (error) {
