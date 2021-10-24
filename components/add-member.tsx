@@ -58,7 +58,7 @@ export const AddMemberForm: FC = () => {
       };
       addGuildMember(guildMember);
       setUserName("");
-      setRank(null);
+      setRank(guildRanks[0]);
       setTitle(null);
       setLevel(null);
       setRoles(null);
