@@ -3,8 +3,15 @@ import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { SessionProvider } from 'next-auth/react';
 import { MemberContextProvider } from '../components/memberContext';
+import { useEffect } from 'react';
+import { fullstoryInit } from '../components/fullstory';
+
 
 function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+	useEffect(()=>{
+		fullstoryInit();
+	},[]);
+
 	return (
 		<SessionProvider session={session}>
 			<MemberContextProvider>
