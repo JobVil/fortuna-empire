@@ -1,9 +1,5 @@
-window['_fs_debug'] = false;
-window['_fs_host'] = 'fullstory.test:8043';
-window['_fs_script'] = 'edge.fullstory.test:8043/s/fs.js';
-window['_fs_org'] = 'o-1N-na1';
-window['_fs_namespace'] = 'FS';
-const fullstoryFunc = function(m,n,e,t,l,o,g,y){
+
+const fullstoryFunc = function(m,n,e,t,l,o,g,y) {
     if (e in m) {if(m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].');} return;}
     g=m[e]=function(a,b,s){g.q?g.q.push([a,b,s]):g._api(a,b,s);};g.q=[];
     o=n.createElement(t);o.async=1;o.crossOrigin='anonymous';o.src='https://'+_fs_script;
@@ -21,4 +17,11 @@ const fullstoryFunc = function(m,n,e,t,l,o,g,y){
     g._v="1.3.0";
 };
 
-export const fullstoryInit = () => fullstoryFunc(window,document,window['_fs_namespace'],'script','user');
+export const fullstoryInit = () => {
+    window['_fs_debug'] = false;
+    window['_fs_host'] = 'fullstory.test:8043';
+    window['_fs_script'] = 'edge.fullstory.test:8043/s/fs.js';
+    window['_fs_org'] = 'o-1N-na1';
+    window['_fs_namespace'] = 'FS';
+    fullstoryFunc(window,document,window['_fs_namespace'],'script','user');
+};
