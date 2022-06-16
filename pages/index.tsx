@@ -18,6 +18,12 @@ export default function Home() {
 		<Layout>
 			<Heading mb={10} size={'4xl'}>
 				Welcome To Fortuna Empire!
+				<a className="external-link" href="https://www.google.com/">
+					external link test
+				</a>
+				<a className="external-link2" href="https://www.google.com/" target="_blank" rel="noreferrer">
+					external link test 2
+				</a>
 			</Heading>
 			<Heading mb={10} size={'2xl'}>
 				The Kingdom of the lucky
