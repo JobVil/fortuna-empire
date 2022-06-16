@@ -19,10 +19,10 @@ const fullstoryFunc = function(m,n,e,t,l,o,g,y) {
 
 export const fullstoryInit = () => {
     if(!window) return;
-    window['_fs_debug'] = false;
+    window['_fs_debug'] = true;
     window['_fs_host'] = 'fullstory.test:8043';
     window['_fs_script'] = 'edge.fullstory.test:8043/s/fs.js';
     window['_fs_org'] = 'o-1N-na1';
-    window['_fs_namespace'] = 'FS';
+    window['_fs_namespace'] = 'testdrive';
     fullstoryFunc(window,document,window['_fs_namespace'],'script','user');
 };
